@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- Zawiera informację nagłówkową pliku XML oraz informację o użytym kodowaniu znaków. -->
 <module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.enova.pl/schema/business_struct.xsd" xsi:schemaLocation="http://www.enova.pl/schema/ http://www.enova.pl/schema/business_struct.xsd"
- name="BPX_NSA" namespace="BPX_NSA" versionName="BPX_NSA_1" versionNumber="1">
+ name="BPX_NSA" namespace="BPX_NSA" versionName="BPX_NSA_1" versionNumber="2">
 	<using>BPX_NSA</using>
+
+	<table name="Zwrot" tablename="Zwroty" >
+		<col name="Towar" type="int" modifier="public"/>
+		<col name="Uzasadnienie" type="string" length="50" modifier="public"/>
+
+	</table>
 </module>
