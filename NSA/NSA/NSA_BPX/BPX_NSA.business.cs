@@ -16,7 +16,7 @@ using Soneta.Business;
 using BPX_NSA;
 using BPX_NSA;
 
-[assembly: ModuleType("BPX_NSA", typeof(BPX_NSA.BPX_NSAModule), 4, "BPX_NSA_1", 0, VersionNumber=1)]
+[assembly: ModuleType("BPX_NSA", typeof(BPX_NSA.BPX_NSAModule), 4, "BPX_NSA_1", 2, VersionNumber=3)]
 
 namespace BPX_NSA;
 
@@ -27,6 +27,7 @@ namespace BPX_NSA;
 /// <seealso cref="Soneta.Business.Module"/>
 /// <seealso cref="Soneta.Business.Session"/>
 [System.CodeDom.Compiler.GeneratedCode("Soneta.CodeGenerators", "4")]
+#warning Description for module 'BPX_NSA' is not defined
 public partial class BPX_NSAModule : Module {
 
     public static BPX_NSAModule GetInstance(ISessionable session) => (BPX_NSAModule)session?.Session?.Modules[moduleInfo];
@@ -41,10 +42,482 @@ public partial class BPX_NSAModule : Module {
     [Browsable(false)]
     public BPX_NSAModule BPX_NSA => moduleBPX_NSA ??= BPX_NSAModule.GetInstance(Session);
 
+    public static readonly Soneta.Business.App.TableInfo ZwrotyTableInfo = new Soneta.Business.App.TableInfo.Create<Zwroty, Zwrot, ZwrotRecord>("Zwrot") {
+    };
+
+    public Zwroty Zwroty => (Zwroty)Session.Tables[ZwrotyTableInfo];
+
+    /// <summary>
+    /// Klasa implementująca standardową obsługę tabeli obiektów Zwrot.
+    /// Dziedzicząca klasa <see cref="Zwroty"/> zawiera kod użytkownika
+    /// zawierający specyficzną funkcjonalność tabeli, która nie zawiera się w funkcjonalności
+    /// biblioteki <see cref="Soneta.Business"/>.
+    /// </summary>
+    /// <seealso cref="Zwroty"/>
+    /// <seealso cref="ZwrotRow"/>
+    /// <seealso cref="Zwrot"/>
+    /// <seealso cref="Soneta.Business.Table"/>
+    #warning Description for table 'Zwrot' is not defined
+    public abstract partial class ZwrotTable : Table {
+
+        protected ZwrotTable() {}
+
+
+        /// <summary>
+        /// Typowane property dostarczające obiekt modułu zawierającegą tą tabelę. Umożliwia dostęp do
+        /// innych obiektów znajdujących się w tym samym module.
+        /// </summary>
+        /// <seealso cref="BPX_NSAModule"/>
+        public new BPX_NSAModule Module => (BPX_NSAModule)base.Module;
+
+        public System.Linq.IQueryable<Zwrot> AsQuery() => AsQuery<Zwrot>();
+
+        /// <summary>
+        /// Typowany indekser dostarczający obiekty znajdujące się w tej tabeli przy pomocy 
+        /// ID identyfikującego jednoznacznie obiekt w systemie.
+        /// </summary>
+        /// <param name="id">Liczba będąca unikalnym identyfikatorem obiektu. Wartości
+        /// ujemne identyfikują obiekty, które zostały dodane i nie są jeszcze zapisane do bazy danych.</param>
+        /// <seealso cref="Zwrot"/>
+        public new Zwrot this[int id] => (Zwrot)base[id];
+
+        /// <summary>
+        /// Typowany indekser dostarczający obiekty znajdujące się w tej tabeli przy pomocy 
+        /// tablicy ID identyfikujących jednoznacznie obiekt w systemie.
+        /// </summary>
+        /// <param name="ids">Tablica liczb będąca unikalnymi identyfikatorami obiektu. Wartości
+        /// ujemne identyfikują obiekty, które zostały dodane i nie są jeszcze zapisane do bazy danych.</param>
+        /// <seealso cref="Zwrot"/>
+        public new Zwrot[] this[int[] ids] => (Zwrot[])base[ids];
+
+        protected override Row CreateRow(RowCreator creator) => new Zwrot();
+
+        [Soneta.Langs.TranslateIgnore]
+        protected override sealed void PrepareNames(StringBuilder names, string divider) {
+            names.Append(divider); names.Append("Towar");
+            names.Append(divider); names.Append("Uzasadnienie");
+        }
+
+    }
+
+    public abstract partial class ZwrotRow : Row {
+
+        private ZwrotRecord record;
+
+        protected override void AssignRecord(Record rec) {
+            record = (ZwrotRecord)rec;
+        }
+
+        protected ZwrotRow() : base(true) {
+        }
+
+        protected override Row PrimaryRow => null;
+
+        public int Towar {
+            get {
+                if (record==null) GetRecord();
+                return record.Towar;
+            }
+            set {
+                ZwrotSchema.TowarBeforeEdit?.Invoke((Zwrot)this, ref value);
+                GetEdit(record==null, false);
+                record.Towar = value;
+                ZwrotSchema.TowarAfterEdit?.Invoke((Zwrot)this);
+            }
+        }
+
+        [MaxLength(50)]
+        public string Uzasadnienie {
+            get {
+                if (record==null) GetRecord();
+                return record.Uzasadnienie;
+            }
+            set {
+                ZwrotSchema.UzasadnienieBeforeEdit?.Invoke((Zwrot)this, ref value);
+                ArgumentNullException.ThrowIfNull(value, nameof(Uzasadnienie));
+                value = value.TrimEnd();
+                if (value.Length>UzasadnienieLength) throw new ValueToLongException(this, nameof(Uzasadnienie), UzasadnienieLength);
+                GetEdit(record==null, false);
+                record.Uzasadnienie = value;
+                ZwrotSchema.UzasadnienieAfterEdit?.Invoke((Zwrot)this);
+            }
+        }
+
+        public const int UzasadnienieLength = 50;
+
+        [Browsable(false)]
+        public new Zwroty Table => (Zwroty)base.Table;
+
+        [Browsable(false)]
+        public BPX_NSAModule Module => Table.Module;
+
+        protected override Soneta.Business.App.TableInfo TableInfo => ZwrotyTableInfo;
+
+        public sealed override AccessRights GetObjectRight() {
+            AccessRights ar = CalcObjectRight();
+            ZwrotSchema.OnCalcObjectRight?.Invoke((Zwrot)this, ref ar);
+            return ar;
+        }
+
+        protected sealed override AccessRights GetParentsObjectRight() {
+            AccessRights result = CalcParentsObjectRight();
+            ZwrotSchema.OnCalcParentsObjectRight?.Invoke((Zwrot)this, ref result);
+            return result;
+        }
+
+        protected override bool CalcReadOnly() {
+            bool result = false;
+            ZwrotSchema.OnCalcReadOnly?.Invoke((Zwrot)this, ref result);
+            return result;
+        }
+
+        protected override void OnAdded() {
+            base.OnAdded();
+            ZwrotSchema.OnAdded?.Invoke((Zwrot)this);
+        }
+
+        protected override void OnLoaded() {
+            base.OnLoaded();
+            ZwrotSchema.OnLoaded?.Invoke((Zwrot)this);
+        }
+
+        protected override void OnEditing() {
+            base.OnEditing();
+            ZwrotSchema.OnEditing?.Invoke((Zwrot)this);
+        }
+
+        protected override void OnDeleting() {
+            base.OnDeleting();
+            ZwrotSchema.OnDeleting?.Invoke((Zwrot)this);
+        }
+
+        protected override void OnDeleted() {
+            base.OnDeleted();
+            ZwrotSchema.OnDeleted?.Invoke((Zwrot)this);
+        }
+
+        protected override void OnRepacked() {
+            base.OnRepacked();
+            ZwrotSchema.OnRepacked?.Invoke((Zwrot)this);
+        }
+
+    }
+
+    public sealed class ZwrotRecord : Record {
+        public int Towar;
+        [MaxLength(50)]
+        public string Uzasadnienie = "";
+
+        public override Record Clone() {
+            ZwrotRecord rec = (ZwrotRecord)MemberwiseClone();
+            return rec;
+        }
+
+        public override void Load(RecordReader creator) {
+            Towar = creator.Read_int();
+            Uzasadnienie = creator.Read_string();
+        }
+    }
+
+    public static class ZwrotSchema {
+
+        internal static RowDelegate<ZwrotRow, int> TowarBeforeEdit;
+        public static void AddTowarBeforeEdit(RowDelegate<ZwrotRow, int> value)
+        	=> TowarBeforeEdit = (RowDelegate<ZwrotRow, int>)Delegate.Combine(TowarBeforeEdit, value);
+
+        internal static RowDelegate<ZwrotRow> TowarAfterEdit;
+        public static void AddTowarAfterEdit(RowDelegate<ZwrotRow> value)
+        	=> TowarAfterEdit = (RowDelegate<ZwrotRow>)Delegate.Combine(TowarAfterEdit, value);
+
+        internal static RowDelegate<ZwrotRow, string> UzasadnienieBeforeEdit;
+        public static void AddUzasadnienieBeforeEdit(RowDelegate<ZwrotRow, string> value)
+        	=> UzasadnienieBeforeEdit = (RowDelegate<ZwrotRow, string>)Delegate.Combine(UzasadnienieBeforeEdit, value);
+
+        internal static RowDelegate<ZwrotRow> UzasadnienieAfterEdit;
+        public static void AddUzasadnienieAfterEdit(RowDelegate<ZwrotRow> value)
+        	=> UzasadnienieAfterEdit = (RowDelegate<ZwrotRow>)Delegate.Combine(UzasadnienieAfterEdit, value);
+
+        internal static RowDelegate<ZwrotRow> OnLoaded;
+        public static void AddOnLoaded(RowDelegate<ZwrotRow> value)
+        	=> OnLoaded = (RowDelegate<ZwrotRow>)Delegate.Combine(OnLoaded, value);
+
+        internal static RowDelegate<ZwrotRow> OnAdded;
+        public static void AddOnAdded(RowDelegate<ZwrotRow> value)
+        	=> OnAdded = (RowDelegate<ZwrotRow>)Delegate.Combine(OnAdded, value);
+
+        internal static RowDelegate<ZwrotRow> OnEditing;
+        public static void AddOnEditing(RowDelegate<ZwrotRow> value)
+        	=> OnEditing = (RowDelegate<ZwrotRow>)Delegate.Combine(OnEditing, value);
+
+        internal static RowDelegate<ZwrotRow> OnDeleting;
+        public static void AddOnDeleting(RowDelegate<ZwrotRow> value)
+        	=> OnDeleting = (RowDelegate<ZwrotRow>)Delegate.Combine(OnDeleting, value);
+
+        internal static RowDelegate<ZwrotRow> OnDeleted;
+        public static void AddOnDeleted(RowDelegate<ZwrotRow> value)
+        	=> OnDeleted = (RowDelegate<ZwrotRow>)Delegate.Combine(OnDeleted, value);
+
+        internal static RowDelegate<ZwrotRow> OnRepacked;
+        public static void AddOnRepacked(RowDelegate<ZwrotRow> value)
+        	=> OnRepacked = (RowDelegate<ZwrotRow>)Delegate.Combine(OnRepacked, value);
+
+        internal static RowAccessRightsDelegate<ZwrotRow> OnCalcObjectRight;
+        public static void AddOnCalcObjectRight(RowAccessRightsDelegate<ZwrotRow> value)
+        	=> OnCalcObjectRight = (RowAccessRightsDelegate<ZwrotRow>)Delegate.Combine(OnCalcObjectRight, value);
+
+        internal static RowAccessRightsDelegate<ZwrotRow> OnCalcParentsObjectRight;
+        public static void AddOnCalcParentsObjectRight(RowAccessRightsDelegate<ZwrotRow> value)
+        	=> OnCalcParentsObjectRight = (RowAccessRightsDelegate<ZwrotRow>)Delegate.Combine(OnCalcParentsObjectRight, value);
+
+        internal static RowReadOnlyDelegate<ZwrotRow> OnCalcReadOnly;
+        public static void AddOnCalcReadOnly(RowReadOnlyDelegate<ZwrotRow> value)
+        	=> OnCalcReadOnly = (RowReadOnlyDelegate<ZwrotRow>)Delegate.Combine(OnCalcReadOnly, value);
+
+    }
+
+    public static readonly Soneta.Business.App.TableInfo ZamowieniaTableInfo = new Soneta.Business.App.TableInfo.Create<Zamowienia, Zamowienie, ZamowienieRecord>("Zamowien") {
+    };
+
+    public Zamowienia Zamowienia => (Zamowienia)Session.Tables[ZamowieniaTableInfo];
+
+    /// <summary>
+    /// Klasa implementująca standardową obsługę tabeli obiektów Zamowienie.
+    /// Dziedzicząca klasa <see cref="Zamowienia"/> zawiera kod użytkownika
+    /// zawierający specyficzną funkcjonalność tabeli, która nie zawiera się w funkcjonalności
+    /// biblioteki <see cref="Soneta.Business"/>.
+    /// </summary>
+    /// <seealso cref="Zamowienia"/>
+    /// <seealso cref="ZamowienieRow"/>
+    /// <seealso cref="Zamowienie"/>
+    /// <seealso cref="Soneta.Business.Table"/>
+    #warning Description for table 'Zamowienie' is not defined
+    public abstract partial class ZamowienieTable : Table {
+
+        protected ZamowienieTable() {}
+
+
+        /// <summary>
+        /// Typowane property dostarczające obiekt modułu zawierającegą tą tabelę. Umożliwia dostęp do
+        /// innych obiektów znajdujących się w tym samym module.
+        /// </summary>
+        /// <seealso cref="BPX_NSAModule"/>
+        public new BPX_NSAModule Module => (BPX_NSAModule)base.Module;
+
+        public System.Linq.IQueryable<Zamowienie> AsQuery() => AsQuery<Zamowienie>();
+
+        /// <summary>
+        /// Typowany indekser dostarczający obiekty znajdujące się w tej tabeli przy pomocy 
+        /// ID identyfikującego jednoznacznie obiekt w systemie.
+        /// </summary>
+        /// <param name="id">Liczba będąca unikalnym identyfikatorem obiektu. Wartości
+        /// ujemne identyfikują obiekty, które zostały dodane i nie są jeszcze zapisane do bazy danych.</param>
+        /// <seealso cref="Zamowienie"/>
+        public new Zamowienie this[int id] => (Zamowienie)base[id];
+
+        /// <summary>
+        /// Typowany indekser dostarczający obiekty znajdujące się w tej tabeli przy pomocy 
+        /// tablicy ID identyfikujących jednoznacznie obiekt w systemie.
+        /// </summary>
+        /// <param name="ids">Tablica liczb będąca unikalnymi identyfikatorami obiektu. Wartości
+        /// ujemne identyfikują obiekty, które zostały dodane i nie są jeszcze zapisane do bazy danych.</param>
+        /// <seealso cref="Zamowienie"/>
+        public new Zamowienie[] this[int[] ids] => (Zamowienie[])base[ids];
+
+        protected override Row CreateRow(RowCreator creator) => new Zamowienie();
+
+        [Soneta.Langs.TranslateIgnore]
+        protected override sealed void PrepareNames(StringBuilder names, string divider) {
+            names.Append(divider); names.Append("Numer");
+            names.Append(divider); names.Append("NazwaZamowienia");
+        }
+
+    }
+
+    public abstract partial class ZamowienieRow : Row {
+
+        private ZamowienieRecord record;
+
+        protected override void AssignRecord(Record rec) {
+            record = (ZamowienieRecord)rec;
+        }
+
+        protected ZamowienieRow() : base(true) {
+        }
+
+        protected override Row PrimaryRow => null;
+
+        public int Numer {
+            get {
+                if (record==null) GetRecord();
+                return record.Numer;
+            }
+            set {
+                ZamowienieSchema.NumerBeforeEdit?.Invoke((Zamowienie)this, ref value);
+                GetEdit(record==null, false);
+                record.Numer = value;
+                ZamowienieSchema.NumerAfterEdit?.Invoke((Zamowienie)this);
+            }
+        }
+
+        [MaxLength(50)]
+        public string NazwaZamowienia {
+            get {
+                if (record==null) GetRecord();
+                return record.NazwaZamowienia;
+            }
+            set {
+                ZamowienieSchema.NazwaZamowieniaBeforeEdit?.Invoke((Zamowienie)this, ref value);
+                ArgumentNullException.ThrowIfNull(value, nameof(NazwaZamowienia));
+                value = value.TrimEnd();
+                if (value.Length>NazwaZamowieniaLength) throw new ValueToLongException(this, nameof(NazwaZamowienia), NazwaZamowieniaLength);
+                GetEdit(record==null, false);
+                record.NazwaZamowienia = value;
+                ZamowienieSchema.NazwaZamowieniaAfterEdit?.Invoke((Zamowienie)this);
+            }
+        }
+
+        public const int NazwaZamowieniaLength = 50;
+
+        [Browsable(false)]
+        public new Zamowienia Table => (Zamowienia)base.Table;
+
+        [Browsable(false)]
+        public BPX_NSAModule Module => Table.Module;
+
+        protected override Soneta.Business.App.TableInfo TableInfo => ZamowieniaTableInfo;
+
+        public sealed override AccessRights GetObjectRight() {
+            AccessRights ar = CalcObjectRight();
+            ZamowienieSchema.OnCalcObjectRight?.Invoke((Zamowienie)this, ref ar);
+            return ar;
+        }
+
+        protected sealed override AccessRights GetParentsObjectRight() {
+            AccessRights result = CalcParentsObjectRight();
+            ZamowienieSchema.OnCalcParentsObjectRight?.Invoke((Zamowienie)this, ref result);
+            return result;
+        }
+
+        protected override bool CalcReadOnly() {
+            bool result = false;
+            ZamowienieSchema.OnCalcReadOnly?.Invoke((Zamowienie)this, ref result);
+            return result;
+        }
+
+        protected override void OnAdded() {
+            base.OnAdded();
+            ZamowienieSchema.OnAdded?.Invoke((Zamowienie)this);
+        }
+
+        protected override void OnLoaded() {
+            base.OnLoaded();
+            ZamowienieSchema.OnLoaded?.Invoke((Zamowienie)this);
+        }
+
+        protected override void OnEditing() {
+            base.OnEditing();
+            ZamowienieSchema.OnEditing?.Invoke((Zamowienie)this);
+        }
+
+        protected override void OnDeleting() {
+            base.OnDeleting();
+            ZamowienieSchema.OnDeleting?.Invoke((Zamowienie)this);
+        }
+
+        protected override void OnDeleted() {
+            base.OnDeleted();
+            ZamowienieSchema.OnDeleted?.Invoke((Zamowienie)this);
+        }
+
+        protected override void OnRepacked() {
+            base.OnRepacked();
+            ZamowienieSchema.OnRepacked?.Invoke((Zamowienie)this);
+        }
+
+    }
+
+    public sealed class ZamowienieRecord : Record {
+        public int Numer;
+        [MaxLength(50)]
+        public string NazwaZamowienia = "";
+
+        public override Record Clone() {
+            ZamowienieRecord rec = (ZamowienieRecord)MemberwiseClone();
+            return rec;
+        }
+
+        public override void Load(RecordReader creator) {
+            Numer = creator.Read_int();
+            NazwaZamowienia = creator.Read_string();
+        }
+    }
+
+    public static class ZamowienieSchema {
+
+        internal static RowDelegate<ZamowienieRow, int> NumerBeforeEdit;
+        public static void AddNumerBeforeEdit(RowDelegate<ZamowienieRow, int> value)
+        	=> NumerBeforeEdit = (RowDelegate<ZamowienieRow, int>)Delegate.Combine(NumerBeforeEdit, value);
+
+        internal static RowDelegate<ZamowienieRow> NumerAfterEdit;
+        public static void AddNumerAfterEdit(RowDelegate<ZamowienieRow> value)
+        	=> NumerAfterEdit = (RowDelegate<ZamowienieRow>)Delegate.Combine(NumerAfterEdit, value);
+
+        internal static RowDelegate<ZamowienieRow, string> NazwaZamowieniaBeforeEdit;
+        public static void AddNazwaZamowieniaBeforeEdit(RowDelegate<ZamowienieRow, string> value)
+        	=> NazwaZamowieniaBeforeEdit = (RowDelegate<ZamowienieRow, string>)Delegate.Combine(NazwaZamowieniaBeforeEdit, value);
+
+        internal static RowDelegate<ZamowienieRow> NazwaZamowieniaAfterEdit;
+        public static void AddNazwaZamowieniaAfterEdit(RowDelegate<ZamowienieRow> value)
+        	=> NazwaZamowieniaAfterEdit = (RowDelegate<ZamowienieRow>)Delegate.Combine(NazwaZamowieniaAfterEdit, value);
+
+        internal static RowDelegate<ZamowienieRow> OnLoaded;
+        public static void AddOnLoaded(RowDelegate<ZamowienieRow> value)
+        	=> OnLoaded = (RowDelegate<ZamowienieRow>)Delegate.Combine(OnLoaded, value);
+
+        internal static RowDelegate<ZamowienieRow> OnAdded;
+        public static void AddOnAdded(RowDelegate<ZamowienieRow> value)
+        	=> OnAdded = (RowDelegate<ZamowienieRow>)Delegate.Combine(OnAdded, value);
+
+        internal static RowDelegate<ZamowienieRow> OnEditing;
+        public static void AddOnEditing(RowDelegate<ZamowienieRow> value)
+        	=> OnEditing = (RowDelegate<ZamowienieRow>)Delegate.Combine(OnEditing, value);
+
+        internal static RowDelegate<ZamowienieRow> OnDeleting;
+        public static void AddOnDeleting(RowDelegate<ZamowienieRow> value)
+        	=> OnDeleting = (RowDelegate<ZamowienieRow>)Delegate.Combine(OnDeleting, value);
+
+        internal static RowDelegate<ZamowienieRow> OnDeleted;
+        public static void AddOnDeleted(RowDelegate<ZamowienieRow> value)
+        	=> OnDeleted = (RowDelegate<ZamowienieRow>)Delegate.Combine(OnDeleted, value);
+
+        internal static RowDelegate<ZamowienieRow> OnRepacked;
+        public static void AddOnRepacked(RowDelegate<ZamowienieRow> value)
+        	=> OnRepacked = (RowDelegate<ZamowienieRow>)Delegate.Combine(OnRepacked, value);
+
+        internal static RowAccessRightsDelegate<ZamowienieRow> OnCalcObjectRight;
+        public static void AddOnCalcObjectRight(RowAccessRightsDelegate<ZamowienieRow> value)
+        	=> OnCalcObjectRight = (RowAccessRightsDelegate<ZamowienieRow>)Delegate.Combine(OnCalcObjectRight, value);
+
+        internal static RowAccessRightsDelegate<ZamowienieRow> OnCalcParentsObjectRight;
+        public static void AddOnCalcParentsObjectRight(RowAccessRightsDelegate<ZamowienieRow> value)
+        	=> OnCalcParentsObjectRight = (RowAccessRightsDelegate<ZamowienieRow>)Delegate.Combine(OnCalcParentsObjectRight, value);
+
+        internal static RowReadOnlyDelegate<ZamowienieRow> OnCalcReadOnly;
+        public static void AddOnCalcReadOnly(RowReadOnlyDelegate<ZamowienieRow> value)
+        	=> OnCalcReadOnly = (RowReadOnlyDelegate<ZamowienieRow>)Delegate.Combine(OnCalcReadOnly, value);
+
+    }
+
 }
 
 [System.CodeDom.Compiler.GeneratedCode("Soneta.CodeGenerators", "4")]
 public static class StaticsBPX_NSAModule {
     public static BPX_NSAModule GetBPX_NSA(this Session session) => BPX_NSAModule.GetInstance(session);
+
+    public static TResult Record<TResult>(this IRecordInvoker<Zwrot, TResult> row, Action<BPX_NSAModule.ZwrotRecord> action)
+        => row.InvokeAction(action, (rec, act) => ((Action<BPX_NSAModule.ZwrotRecord>)act)((BPX_NSAModule.ZwrotRecord)rec));
+
+    public static TResult Record<TResult>(this IRecordInvoker<Zamowienie, TResult> row, Action<BPX_NSAModule.ZamowienieRecord> action)
+        => row.InvokeAction(action, (rec, act) => ((Action<BPX_NSAModule.ZamowienieRecord>)act)((BPX_NSAModule.ZamowienieRecord)rec));
 }
 
