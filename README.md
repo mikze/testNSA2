@@ -1,6 +1,7 @@
 🌳 Strategia branchowania – model hybrydowy z szybką ścieżką wydawniczą
 Poniższy diagram przedstawia przyjęty w projekcie model pracy z gałęziami. Dzięki rozdzieleniu środowisk testowych oraz zastosowaniu gałęzi buforowych (Rozwoj i Release_1) uzyskujemy pełną kontrolę nad wersjonowaniem i możliwość błyskawicznego wypuszczania pojedynczych, przetestowanych funkcji.
- 
+ <img width="945" height="516" alt="image" src="https://github.com/user-attachments/assets/ab2666da-e4a6-428f-9fbd-1c1eef4a66a1" />
+
 ________________________________________
 📋 Opis gałęzi i przepływu pracy
 1. Gałęzie robocze (feature branches) – np. users/mz/*, users/kk/*
